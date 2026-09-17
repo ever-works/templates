@@ -1,0 +1,7 @@
+# The row this listing keeps for the Cal.diy App Blueprint.
+# Fields are the four the listing requires; the authoritative machine-readable row is `../manifest.json`,
+# and the Blueprint's own metadata lives in `ever-works/cal-diy-template` (`.works/template.yml`).
+name: Cal.diy (community build)
+repository: https://github.com/ever-works/cal-diy-template
+license: MIT
+verified: false

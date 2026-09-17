@@ -1,0 +1,38 @@
+# Validates every App spec and the listing manifest in this repository.
+#
+# `tools/validate-specs.mjs` compiles `schema/app-spec.schema.json` with ajv 8 (draft 2020-12) and applies
+# it to every `app-spec.yml` in the repository, then checks `manifest.json` against its own schema. It
+# exits non-zero and names the failing file, so a pull request that adds an invalid App spec cannot merge.
+
+name: validate
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: validate-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    specs:
+        name: app specs + manifest
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+
+            - name: Install
+              run: npm install --no-audit --no-fund
+
+            - name: Validate every App spec and the listing manifest
+              run: npm run validate
