@@ -1,12 +1,50 @@
 # Ever Works — templates
 
-**This is the curated listing of the templates Ever Works offers.** It is a *metadata* repository: it holds
-one folder per template — the Blueprint's `README.md`, its App spec, and a small `metadata.yml` — plus the
-machine-readable listing (`manifest.json`) that the platform curates from. It holds **no application code**.
+**This is the listing of the templates Ever Works offers — a human index, not the machine source of truth.**
+Every template is its own repository, named `ever-works/<name>-template`, and that repository is the only
+place its App spec, its shape and its documentation live. This repository lists them: one row per template
+repository in [`manifest.json`](./manifest.json), the licence registry in [`licenses.yml`](./licenses.yml),
+the schemas both are checked against, and the CI that checks them. It holds **no application code and no
+copy of any template**.
 
-> **Status: seed.** The three App Blueprint rows below and in `manifest.json` are marked `placeholder`: the
-> template repositories exist, but none has been released or verified on a cluster yet. The four
-> Website/Work Template rows in `manifest.json` are in production.
+> **Status: seed.** The App Blueprint rows are marked `placeholder`: their template repositories exist, but
+> none has been released (tagged) or verified on a cluster yet. The four Website/Work Template rows are in
+> production.
+
+---
+
+## The templates
+
+### App Blueprints
+
+| Template | Upstream project | License | Install shape | Status | Template repository |
+| --- | --- | --- | --- | --- | --- |
+| Cal (community build) | [`calcom/cal.diy`](https://github.com/calcom/cal.diy) | MIT | `code-bearing` (target, see below) | `placeholder` | [`ever-works/cal-template`](https://github.com/ever-works/cal-template) |
+| Umami | [`umami-software/umami`](https://github.com/umami-software/umami) | MIT | `metadata-only` | `placeholder` | [`ever-works/umami-template`](https://github.com/ever-works/umami-template) |
+
+**Cal** is open-source scheduling. Its Blueprint targets the upstream's **community edition** —
+`calcom/cal.diy`, which the upstream calls *Cal.diy* — carries the trademark notice the upstream requires,
+and is **not** offered for managed hosting: upstream recommends personal, non-production use, so it stays on
+the user's own cluster. The listing records the shape a released Cal Blueprint takes (`code-bearing`, a
+public fork of the upstream); `ever-works/cal-template` is today a metadata-only seed and declares itself so
+in its own `.works/template.yml`. Which of the two it will be is still open — CI reports the difference as a
+warning until the row is released.
+
+**Umami** is privacy-first, cookieless web analytics. Its Blueprint deploys the upstream's published
+container image pinned by digest, so a run spends no build minutes.
+
+`manifest.json` also carries the acceptance fixture `app-fixture-hello` (Blueprint repository
+`ever-works/app-fixture-hello-template`, currently private), which exercises every App spec feature in the
+acceptance lanes and is not offered for hosting.
+
+### Website/Work Templates
+
+| Template | Template repository | License | Status |
+| --- | --- | --- | --- |
+| Directory (Next.js) | [`ever-works/directory-web-template`](https://github.com/ever-works/directory-web-template) | AGPL-3.0-only | `production` |
+| Directory (Minimal, Astro) | [`ever-works/directory-web-minimal-template`](https://github.com/ever-works/directory-web-minimal-template) | AGPL-3.0-only | `production` |
+| Website (Next.js) | [`ever-works/web-template`](https://github.com/ever-works/web-template) | AGPL-3.0-only | `production` |
+| Website (Minimal, Astro) | [`ever-works/web-minimal-template`](https://github.com/ever-works/web-minimal-template) | AGPL-3.0-only | `production` |
 
 ---
 
@@ -21,19 +59,17 @@ upstream project and what is still unverified.
 A Blueprint deliberately contains **no upstream source**. It is metadata: the smallest artifact that lets
 the platform stand an app up reproducibly, and the artifact a reviewer can actually read.
 
-Every Blueprint in this listing carries:
+**All of it lives in the template repository**, never here:
 
-| File | What it is |
+| File in `ever-works/<name>-template` | What it is |
 | --- | --- |
+| `.works/works.yml` | The App spec — the file the platform's Blueprint resolver reads and applies. |
+| `.works/template.yml` | The repository's shape (`code-bearing` or `metadata-only`) and its app source. |
 | `README.md` | The human document: what the Blueprint decides, the facts and where they were read, and what is still unverified. |
-| `app-spec.yml` | The App spec itself, verbatim. |
-| `metadata.yml` | `name`, `repository`, `license`, `verified` — the row as this listing keeps it. |
 
-The App spec is validated on every pull request by
-[`.github/workflows/validate.yml`](./.github/workflows/validate.yml), which runs
-[`tools/validate-specs.mjs`](./tools/validate-specs.mjs) — `ajv` 8 (draft 2020-12) against
-[`schema/app-spec.schema.json`](./schema/app-spec.schema.json). `manifest.json` is validated against
-[`schema/templates-manifest.schema.json`](./schema/templates-manifest.schema.json) in the same run.
+The platform accepts a repository as a Blueprint only when it is inside the `ever-works` organization and
+**public**, carries the topic `ever-works-app-blueprint`, has a `.works/works.yml` that validates with
+`spec.blueprint.repo` naming that very repository, and declares a licence that does not classify `red`.
 
 ---
 
@@ -48,26 +84,13 @@ You do not need a Blueprint to use Ever Works, and you do not need one for a pro
 - **A listed Blueprint is curation, not a gate.** Being listed means the template is badged, searchable,
   pinned to a reviewed revision, classified by licence, and eligible (or not) for managed hosting.
 - **A template becomes usable the moment its `-template` repository exists** and carries valid metadata; a
-  pull request here is what makes it *listed*.
+  row in this listing is what makes it *listed*.
 
 ---
 
-## The templates
+## Install shapes
 
-| Template | Upstream project | License | Install shape | Link |
-| --- | --- | --- | --- | --- |
-| Cal.diy (community build) | [`calcom/cal.diy`](https://github.com/calcom/cal.diy) | MIT | `code-bearing` | [`ever-works/cal-diy-template`](https://github.com/ever-works/cal-diy-template) · [`cal-diy/`](./cal-diy/) |
-| Umami | [`umami-software/umami`](https://github.com/umami-software/umami) | MIT | `metadata-only` | [`ever-works/umami-template`](https://github.com/ever-works/umami-template) · [`umami/`](./umami/) |
-
-**Cal.diy** is the Open Scheduling community edition. Its Blueprint targets the **community build**
-specifically, carries the trademark notice the upstream requires, and is **not** offered for managed hosting
-— upstream recommends personal, non-production use, so it stays on the user's own cluster.
-
-**Umami** is privacy-first, cookieless web analytics. Its Blueprint deploys the upstream's published
-container image pinned by digest, so a run spends no build minutes.
-
-`Install shape` is what decides how many repositories are forked when you create an App Work from the
-template:
+`Install shape` decides how many repositories are forked when you create an App Work from the template:
 
 | Shape | What the template repository holds | What provisioning forks |
 | --- | --- | --- |
@@ -76,13 +99,51 @@ template:
 
 ---
 
-## The full listing
+## Licence classes
 
-`manifest.json` is the machine-readable listing the platform reads. It carries **seven** rows: the two App
-Blueprints above, the acceptance fixture (`app-fixture-hello`), and the four Website/Work Templates already
-in production (`directory-web`, `directory-web-minimal`, `web`, `web-minimal`). `licenses.yml` is the
-licence registry the platform's licence gate reads — the three classes are fixed, and no pull request here
-may loosen one.
+Every row records the licence the running application is under (`license.spdx`) and its class, from the
+registry in [`licenses.yml`](./licenses.yml). The three classes are fixed — no pull request here may loosen
+one, and the platform keeps its last good copy of the registry if one tries:
+
+| Class | Managed hosting on Ever Works | On the user's own cluster |
+| --- | --- | --- |
+| `green` | Allowed. Permissive and copyleft licences, AGPL included. | Allowed. |
+| `amber` | Only with a recorded upstream agreement. | Allowed, with an attestation. |
+| `red` | Never — and never listed in the catalog. | Allowed, with an attestation. |
+
+A licence the registry cannot identify is treated as `amber`.
+
+---
+
+## What is in this repository
+
+| Path | What it is |
+| --- | --- |
+| [`manifest.json`](./manifest.json) | The listing: one row per template repository — name, summary, kind, status, install shape, app source, pin, licence, managed-hosting decision, verification flag. |
+| [`licenses.yml`](./licenses.yml) | The licence registry the platform's licence gate reads. |
+| [`schema/templates-manifest.schema.json`](./schema/templates-manifest.schema.json) | The schema `manifest.json` is validated against. |
+| [`schema/app-spec.schema.json`](./schema/app-spec.schema.json) | The App spec schema each listed template repository's `.works/works.yml` is validated against. |
+| [`tools/validate-specs.mjs`](./tools/validate-specs.mjs) | The check itself. |
+| [`.github/workflows/validate.yml`](./.github/workflows/validate.yml) | Runs the check on every pull request, on every push to `main`, weekly, and on demand. |
+
+## What CI checks
+
+[`tools/validate-specs.mjs`](./tools/validate-specs.mjs) — `ajv` 8, draft 2020-12:
+
+1. `manifest.json` is valid against `schema/templates-manifest.schema.json`, and its slugs and Blueprint ids
+   are unique.
+2. For every app row, `.works/works.yml` is fetched **from the row's own template repository**, at
+   `template.sha` when the row is pinned and `template.ref` otherwise, and validated against
+   `schema/app-spec.schema.json`. Its `spec.blueprint.id`, `spec.blueprint.repo`, `spec.license.spdx` and
+   `spec.blueprint.version` must agree with the row, and its `.works/template.yml` with the row's install
+   shape and upstream.
+3. A missing file fails the run for a released row; for a `placeholder` row it is a warning.
+
+The template repositories change without a pull request here, so the workflow also runs every Monday: a
+template that drifts away from its row turns the listing red.
+
+A spec that passes here is *well formed*, not *verified*: the rules JSON Schema cannot express, and the
+verification runs on a cluster, belong to the platform.
 
 ---
 
@@ -95,5 +156,5 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 ## License
 
 This repository's own content is **MIT** — see [`LICENSE`](./LICENSE). Each template repository carries its
-own licence, and each Blueprint additionally records the **upstream project's** licence, because that is the
+own licence, and each row additionally records the **upstream project's** licence, because that is the
 licence the running application is under.
