@@ -22,8 +22,10 @@ settled.
 **2. Create the template repository.** `ever-works/<name>-template`, **public**, topic
 `ever-works-app-blueprint`, default branch `main`, with:
 
-- `.works/works.yml` — the App spec, valid against [`schema/app-spec.schema.json`](./schema/app-spec.schema.json),
-  with `spec.blueprint.id` = the row's `blueprint.id` and `spec.blueprint.repo` = the repository itself.
+- `.works/works.yml` — the App spec: root `kind: app`, and a `spec` block valid against
+  [`schema/app-spec.schema.json`](./schema/app-spec.schema.json) (a copy of the platform's published App spec
+  schema), with `spec.blueprint.id` = the row's `blueprint.id` and `spec.blueprint.repo` = the repository itself.
+  It is the only file the platform reads the spec from; do not keep a second copy anywhere.
 - `.works/template.yml` — the shape (`code-bearing` or `metadata-only`) and the app source.
 - `README.md` — the required headings: what the Blueprint decides, the facts and **where they were read**,
   and what is still unverified.
@@ -60,7 +62,8 @@ on every push to `main`, every Monday, and on demand:
 1. `manifest.json` is valid against `schema/templates-manifest.schema.json`, and slugs and Blueprint ids are
    unique.
 2. For every app row, `.works/works.yml` is fetched from the row's template repository — at `template.sha`
-   when pinned, else at `template.ref` — and validated against `schema/app-spec.schema.json`. Its
+   when pinned, else at `template.ref`. Its root `kind` must be `app` and its `spec` block must be valid against
+   `schema/app-spec.schema.json`. Its
    `spec.blueprint.id`, `spec.blueprint.repo` and `spec.license.spdx` must match the row (always an error);
    `spec.blueprint.version`, and the `shape` and `source.repo` of `.works/template.yml`, must match too (an
    error once released, a warning for a `placeholder`).
