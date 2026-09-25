@@ -321,7 +321,7 @@
 					"maxItems": 20
 				},
 				"githubTemplateRepository": {
-					"description": "GitHub's template-repository setting. NOT a statement about App Blueprints — see the fixture conflation note in README.md §7.",
+					"description": "GitHub's template-repository setting. NOT a statement about App Blueprints — see the notes on the app-fixture-hello row in manifest.json.",
 					"type": "boolean"
 				},
 				"license": { "$ref": "#/$defs/license" },

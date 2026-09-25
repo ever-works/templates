@@ -1,7 +1,0 @@
-# The row this listing keeps for the Umami App Blueprint.
-# Fields are the four the listing requires; the authoritative machine-readable row is `../manifest.json`,
-# and the Blueprint's own metadata lives in `ever-works/umami-template` (`.works/template.yml`).
-name: Umami
-repository: https://github.com/ever-works/umami-template
-license: MIT
-verified: false

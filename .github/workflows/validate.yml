@@ -1,8 +1,13 @@
-# Validates every App spec and the listing manifest in this repository.
+# Validates the listing and the App specs of the template repositories it lists.
 #
-# `tools/validate-specs.mjs` compiles `schema/app-spec.schema.json` with ajv 8 (draft 2020-12) and applies
-# it to every `app-spec.yml` in the repository, then checks `manifest.json` against its own schema. It
-# exits non-zero and names the failing file, so a pull request that adds an invalid App spec cannot merge.
+# This repository keeps no copy of any template. `tools/validate-specs.mjs` validates `manifest.json` against
+# `schema/templates-manifest.schema.json`, then, for every app row, fetches `.works/works.yml` from the row's
+# own `-template` repository (at `template.sha`, else `template.ref`) and validates it against
+# `schema/app-spec.schema.json`, and checks that the file agrees with the row. It exits non-zero and names
+# what failed.
+#
+# The template repositories change without a pull request here, so the same check also runs weekly and on
+# demand: drift between a template repository and its row is caught even when nobody touches the listing.
 
 name: validate
 
@@ -10,6 +15,8 @@ on:
     push:
         branches: [main]
     pull_request:
+    schedule:
+        - cron: '23 6 * * 1' # Mondays 06:23 UTC
     workflow_dispatch:
 
 permissions:
@@ -21,7 +28,7 @@ concurrency:
 
 jobs:
     specs:
-        name: app specs + manifest
+        name: manifest + template specs
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
@@ -30,9 +37,13 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: '22'
+                  cache: npm
 
             - name: Install
-              run: npm install --no-audit --no-fund
+              run: npm ci --no-audit --no-fund
 
-            - name: Validate every App spec and the listing manifest
+            - name: Validate the listing and every listed template's App spec
+              env:
+                  # Raises the rate limit on raw.githubusercontent.com; public template repositories need no access.
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: npm run validate
