@@ -4,17 +4,19 @@
 	"generatedBy": "manual",
 	"status": "seed",
 	"catalogOrganization": "ever-works",
-	"updatedAt": "2026-09-17",
+	"updatedAt": "2026-09-26",
 	"notes": [
-		"SEED / DRAFT — hand-authored on 2026-09-17 to create the repository with real content.",
+		"SEED / DRAFT — hand-authored on 2026-09-17 to create the repository; reduced to the listing only on 2026-09-26.",
 		"This file is the LISTING: one row per template repository we keep, website and app alike.",
-		"It is NOT the machine source of truth for resolution. A template is usable because its",
-		"repository exists and carries its own metadata; the platform discovers templates by scanning",
-		"catalogOrganization for repositories whose name ends in 'template' and reads each one's",
-		".works/template.yml and .works/works.yml. This file adds curation (pin, license class,",
+		"It is a human index, NOT the machine source of truth. Every template is its own repository,",
+		"ever-works/<name>-template, and that repository holds the template's spec (.works/works.yml),",
+		"its shape (.works/template.yml) and its documentation (README.md). Nothing here copies them.",
+		"The platform discovers templates by scanning catalogOrganization for repositories whose name ends",
+		"in 'template' and reads each one's own files. This file adds curation (pin, license class,",
 		"managed-hosting decision, verification) and makes a template listed, badgeable and searchable.",
-		"Rows with status 'placeholder' name repositories that do not exist yet (created by APW-13).",
-		"`template.ref` is a branch for a website row (the existing fork-from-branch behaviour) and for an app row while it is a placeholder; on publication an app row's `template.ref` becomes the release tag `v<blueprint.version>` and `template.sha` its commit (CI check 3 in README.md §2)."
+		"Status 'placeholder' = not released yet: the repository may exist, but no release tag v<blueprint.version> exists, so template.sha is null and nothing has been verified on a cluster.",
+		"`template.ref` is a branch for a website row (the existing fork-from-branch behaviour) and for an app row while it is a placeholder; on release an app row's `template.ref` becomes the tag `v<blueprint.version>` and `template.sha` that tag's commit (see CONTRIBUTING.md).",
+		"CI (tools/validate-specs.mjs) validates this file against schema/templates-manifest.schema.json and, for every app row, fetches .works/works.yml from the row's repository at template.sha or template.ref and validates it against schema/app-spec.schema.json."
 	],
 	"templates": [
 		{
@@ -103,8 +105,8 @@
 			"notes": ["Reachable today only through the suffix scan (no ever-works/works blueprint names it)."]
 		},
 		{
-			"slug": "cal-diy",
-			"name": "Cal.diy (community build)",
+			"slug": "cal",
+			"name": "Cal (community build)",
 			"summary": "Open-source scheduling: booking pages, calendar sync, reminders and a large Next.js app.",
 			"kind": "app",
 			"status": "placeholder",
@@ -117,14 +119,14 @@
 				"defaultBranch": "main"
 			},
 			"template": {
-				"repo": "ever-works/cal-diy-template",
-				"url": "https://github.com/ever-works/cal-diy-template",
+				"repo": "ever-works/cal-template",
+				"url": "https://github.com/ever-works/cal-template",
 				"ref": "main",
 				"sha": null,
 				"isGitHubTemplate": false
 			},
 			"blueprint": {
-				"id": "cal-diy",
+				"id": "cal",
 				"version": "0.1.0",
 				"topic": "ever-works-app-blueprint",
 				"verified": false
@@ -143,23 +145,17 @@
 			},
 			"trademark": {
 				"notice": "Cal.diy® is a trademark of Cal.com, Inc. This community build is not affiliated with or endorsed by Cal.com, Inc.",
-				"displayNameSuffix": "(community build)",
-				"protectedPaths": [
-					"LICENSE",
-					"apps/web/public/cal-*",
-					"apps/web/public/calcom-*",
-					"apps/web/public/favicon*",
-					"apps/web/public/apple-touch-icon.png",
-					"packages/ui/components/logo/**"
-				]
+				"displayNameSuffix": "(community build)"
 			},
 			"tags": ["calendar", "booking", "nextjs"],
 			"notes": [
-				"THE code-bearing example: the template repository is a public fork of calcom/cal.diy with our",
-				"metadata added (.works/works.yml, .works/template.yml, README.md, topic). Provisioning forks ONE",
-				"repository — the template — and that fork is the App Work's Work Repository (role 'website').",
-				"Created by APW-13 T28 (seed content: APW-13-golden-paths/blueprints/cal-diy/).",
-				"sha is null only because the repository does not exist yet; a non-placeholder row requires a 40-hex sha."
+				"Template repository ever-works/cal-template (renamed from ever-works/cal-diy-template; blueprint id 'cal'). Its spec (.works/works.yml), shape (.works/template.yml) and documentation (README.md) live there and only there.",
+				"Upstream is calcom/cal.diy, the Open Scheduling community edition, whose own name is Cal.diy; the trademark notice refers to that name. Tags v6.2.0 and older are a different licence and code base, hence refs.exclude.",
+				"Status stays 'placeholder' (checked 2026-09-26): the repository exists, is public, has topic ever-works-app-blueprint and .works/works.yml, but has no tag or release, its spec's blueprint.sha is the all-zero placeholder, and nothing has run on a cluster.",
+				"So template.ref stays 'main' and template.sha null: the schema requires a 40-hex sha only for beta/production rows, and a release tag v0.1.0 does not exist yet. main head on 2026-09-26 was 0fad1794507060d9805647d18e877a49e2b125c0 (recorded, not pinned).",
+				"SHAPE NEEDS A DECISION: this row records the TARGET shape, code-bearing (the template repository is a public fork of calcom/cal.diy and provisioning forks ONE repository, which becomes the Work Repository).",
+				"ever-works/cal-template today is a metadata-only seed, not a fork, and its .works/template.yml declares shape metadata-only. Before release, either re-create it as a fork of calcom/cal.diy or change this row to metadata-only (appSource.mode repository).",
+				"The protected branding paths are part of the spec (display.protectedPaths in .works/works.yml) and are no longer copied into this row."
 			]
 		},
 		{
@@ -200,12 +196,11 @@
 			"managedHosting": { "allowed": true },
 			"tags": ["analytics", "privacy", "postgres"],
 			"notes": [
-				"Metadata-only: the template holds the App spec and nothing else. The app source stays in",
-				"umami-software/umami, so provisioning forks TWO repositories (the app source first, the template",
-				"second). The App Work's Work Repository is the app-source fork.",
-				"The shipped spec deploys the upstream's published image pinned by digest; switching build.strategy",
-				"to dockerfile builds the fork, which is why the app-source fork must exist (blueprint README §Evolving).",
-				"Created by APW-13 T27 (seed content: APW-13-golden-paths/blueprints/umami/)."
+				"Template repository ever-works/umami-template. Its spec (.works/works.yml), shape (.works/template.yml) and documentation (README.md) live there and only there.",
+				"Metadata-only: the template holds our metadata and no application source. The app source stays in umami-software/umami, so provisioning forks TWO repositories (the app source first, the template second); the App Work's Work Repository is the app-source fork.",
+				"The spec deploys the upstream's published image pinned by digest, so a run spends no build minutes; switching build.strategy to dockerfile builds the fork, which is why the app-source fork must exist (template README, 'Evolving an Umami App Work').",
+				"Status stays 'placeholder' (checked 2026-09-26): the repository exists, is public, has topic ever-works-app-blueprint and .works/works.yml, but has no tag or release, its spec's blueprint.sha is the all-zero placeholder, and nothing has run on a cluster.",
+				"So template.ref stays 'main' and template.sha null: the schema requires a 40-hex sha only for beta/production rows, and a release tag v0.1.0 does not exist yet. main head on 2026-09-26 was 6e903b914c5bd1eee9ed58f1e2a81b956a062cb8 (recorded, not pinned)."
 			]
 		},
 		{
@@ -255,7 +250,8 @@
 				"                                          per-run upstreams from it. It is NOT an App Blueprint repository.",
 				"  ever-works/app-fixture-hello-template = the App BLUEPRINT repository (the App spec).",
 				"'template repository' in the GitHub sentence above means the repository setting, not a Blueprint.",
-				"Created by APW-13 T22 (application) and T24 (Blueprint)."
+				"Created by APW-13 T22 (application) and T24 (Blueprint).",
+				"Checked 2026-09-26: both repositories exist but are PRIVATE, so this listing's CI cannot read the Blueprint's .works/works.yml (it warns, because the row is a placeholder)."
 			]
 		}
 	],
