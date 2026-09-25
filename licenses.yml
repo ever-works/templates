@@ -7,7 +7,7 @@
 # NOT LEGAL ADVICE AND NOT YET LEGAL-REVIEWED. APW-03 `tasks.md` T33 requires this file to be
 # drafted from `catalog.md` §4 with the classes fixed per CONTRACTS R-3, and `catalog.md` §7
 # rule 3 requires one legal-reviewer approval for every change to it. Treat `licenses[]` below
-# as "the licenses our seven seed templates and their upstreams actually use", not as a
+# as "the licenses our six listed templates and their upstreams actually use", not as a
 # finished registry.
 #
 # The three classes are FIXED (R-3) and the platform rejects a registry that loosens any of
@@ -19,8 +19,8 @@
 # Which row uses which license (the authoritative link is each row's `license.spdx` in
 # `manifest.json`; this comment is only here so a person can review the registry at a glance):
 #   AGPL-3.0-only  ever-works/{directory-web,directory-web-minimal,web,web-minimal}-template
-#   MIT            ever-works/{cal,umami,app-fixture-hello}-template and their app sources
-#                  (calcom/cal.diy, umami-software/umami, ever-works/app-fixture-hello)
+#   MIT            ever-works/{cal,umami}-template and their app sources
+#                  (calcom/cal.diy, umami-software/umami)
 #   MIT            ever-works/templates itself (this repository's own content — see LICENSE)
 #   BUSL-1.1       <e2e-upstream-org>/app-fixture-license-amber   (test catalog `e2e` branch only)
 #   PolyForm-...   <e2e-upstream-org>/app-fixture-license-red     (test catalog `e2e` branch only)

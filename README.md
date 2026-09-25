@@ -19,23 +19,18 @@ copy of any template**.
 
 | Template | Upstream project | License | Install shape | Status | Template repository |
 | --- | --- | --- | --- | --- | --- |
-| Cal (community build) | [`calcom/cal.diy`](https://github.com/calcom/cal.diy) | MIT | `code-bearing` (target, see below) | `placeholder` | [`ever-works/cal-template`](https://github.com/ever-works/cal-template) |
+| Cal (community build) | [`calcom/cal.diy`](https://github.com/calcom/cal.diy) | MIT | `metadata-only` | `placeholder` | [`ever-works/cal-template`](https://github.com/ever-works/cal-template) |
 | Umami | [`umami-software/umami`](https://github.com/umami-software/umami) | MIT | `metadata-only` | `placeholder` | [`ever-works/umami-template`](https://github.com/ever-works/umami-template) |
 
 **Cal** is open-source scheduling. Its Blueprint targets the upstream's **community edition** —
 `calcom/cal.diy`, which the upstream calls *Cal.diy* — carries the trademark notice the upstream requires,
 and is **not** offered for managed hosting: upstream recommends personal, non-production use, so it stays on
-the user's own cluster. The listing records the shape a released Cal Blueprint takes (`code-bearing`, a
-public fork of the upstream); `ever-works/cal-template` is today a metadata-only seed and declares itself so
-in its own `.works/template.yml`. Which of the two it will be is still open — CI reports the difference as a
-warning until the row is released.
+the user's own cluster. Its template repository holds our metadata only, so creating an App Work forks
+`calcom/cal.diy` and records the template as provenance; re-creating the template as a public fork of the
+upstream (`code-bearing`) remains a future option.
 
 **Umami** is privacy-first, cookieless web analytics. Its Blueprint deploys the upstream's published
 container image pinned by digest, so a run spends no build minutes.
-
-`manifest.json` also carries the acceptance fixture `app-fixture-hello` (Blueprint repository
-`ever-works/app-fixture-hello-template`, currently private), which exercises every App spec feature in the
-acceptance lanes and is not offered for hosting.
 
 ### Website/Work Templates
 
@@ -122,9 +117,13 @@ A licence the registry cannot identify is treated as `amber`.
 | [`manifest.json`](./manifest.json) | The listing: one row per template repository — name, summary, kind, status, install shape, app source, pin, licence, managed-hosting decision, verification flag. |
 | [`licenses.yml`](./licenses.yml) | The licence registry the platform's licence gate reads. |
 | [`schema/templates-manifest.schema.json`](./schema/templates-manifest.schema.json) | The schema `manifest.json` is validated against. |
-| [`schema/app-spec.schema.json`](./schema/app-spec.schema.json) | The App spec schema each listed template repository's `.works/works.yml` is validated against. |
+| [`schema/app-spec.schema.json`](./schema/app-spec.schema.json) | The App spec schema the `spec` block of each listed template repository's `.works/works.yml` is validated against. |
 | [`tools/validate-specs.mjs`](./tools/validate-specs.mjs) | The check itself. |
 | [`.github/workflows/validate.yml`](./.github/workflows/validate.yml) | Runs the check on every pull request, on every push to `main`, weekly, and on demand. |
+
+`schema/app-spec.schema.json` is a verbatim copy of the platform's published App spec schema,
+`packages/agent/src/works-config/schema/app-spec.v1.schema.json` in `ever-works/ever-works` (branch
+`feat/app-works-implementation`, commit `c7ca76c`); refresh it by copying that file again, never by editing it here.
 
 ## What CI checks
 
@@ -133,7 +132,8 @@ A licence the registry cannot identify is treated as `amber`.
 1. `manifest.json` is valid against `schema/templates-manifest.schema.json`, and its slugs and Blueprint ids
    are unique.
 2. For every app row, `.works/works.yml` is fetched **from the row's own template repository**, at
-   `template.sha` when the row is pinned and `template.ref` otherwise, and validated against
+   `template.sha` when the row is pinned and `template.ref` otherwise. Its root `kind` must be `app` (as the
+   platform's Blueprint resolver requires) and its `spec` block must be valid against
    `schema/app-spec.schema.json`. Its `spec.blueprint.id`, `spec.blueprint.repo`, `spec.license.spdx` and
    `spec.blueprint.version` must agree with the row, and its `.works/template.yml` with the row's install
    shape and upstream.

@@ -321,7 +321,7 @@
 					"maxItems": 20
 				},
 				"githubTemplateRepository": {
-					"description": "GitHub's template-repository setting. NOT a statement about App Blueprints — see the notes on the app-fixture-hello row in manifest.json.",
+					"description": "GitHub's template-repository setting. NOT a statement about App Blueprints: an app-source repository can be a GitHub template repository without being a Blueprint.",
 					"type": "boolean"
 				},
 				"license": { "$ref": "#/$defs/license" },
