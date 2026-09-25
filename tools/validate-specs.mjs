@@ -11,8 +11,11 @@
  * 1. `manifest.json` against `schema/templates-manifest.schema.json`, plus the two rules the schema cannot
  *    express: `slug` is unique, and `blueprint.id` is unique among app rows.
  * 2. For every row with `kind: app`: `.works/works.yml` is fetched from the row's `template.repo` at
- *    `template.sha` (when pinned) or else `template.ref`, and validated against
- *    `schema/app-spec.schema.json`. The file must also agree with the row: `spec.blueprint.id`,
+ *    `template.sha` (when pinned) or else `template.ref`. Its root `kind` must be `app` (the platform's
+ *    Blueprint resolver requires it, and its validator does not check the root kind), `spec.kind`, when
+ *    present, must agree, and the `spec` block must be valid against `schema/app-spec.schema.json` — a
+ *    verbatim copy of the platform's published App spec schema (`app-spec.v1.schema.json`), which describes
+ *    the `spec` block, not the envelope. The file must also agree with the row: `spec.blueprint.id`,
  *    `spec.blueprint.repo` and `spec.license.spdx` must match (always an error), and
  *    `spec.blueprint.version` must match (an error for a released row, a warning for a placeholder).
  * 3. For the same rows, `.works/template.yml` (when present) must agree with the row's `shape` and name one of
@@ -198,8 +201,26 @@ async function checkAppRow(row) {
 		errors.push({ at: SPEC_PATH, message: `YAML parse error: ${error.message}` });
 		return { name, outcome: 'FAIL', errors, warnings };
 	}
-	if (!validateAppSpec(document)) {
-		for (const error of ajvErrors(validateAppSpec)) errors.push({ at: `${SPEC_PATH} ${error.at}`, message: error.message });
+	const isMapping = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+	if (!isMapping(document)) {
+		errors.push({ at: SPEC_PATH, message: 'the document is not a YAML mapping' });
+		return { name, outcome: 'FAIL', errors, warnings };
+	}
+	if (document.kind !== 'app') {
+		errors.push({ at: `${SPEC_PATH} /kind`, message: `is ${JSON.stringify(document.kind)}; an App Blueprint's root kind must be "app"` });
+	}
+	if (!isMapping(document.spec)) {
+		errors.push({ at: `${SPEC_PATH} /spec`, message: 'is missing or not a mapping' });
+	} else {
+		if (document.spec.kind !== undefined && document.spec.kind !== document.kind) {
+			errors.push({ at: `${SPEC_PATH} /spec/kind`, message: `is ${JSON.stringify(document.spec.kind)}, the root kind is ${JSON.stringify(document.kind)} (kind_mismatch)` });
+		}
+		if (!validateAppSpec(document.spec)) {
+			for (const error of validateAppSpec.errors ?? []) {
+				const scoped = { ...error, instancePath: `/spec${error.instancePath}` };
+				errors.push({ at: `${SPEC_PATH} ${scoped.instancePath}`, message: describe(scoped) });
+			}
+		}
 	}
 
 	const blueprint = document?.spec?.blueprint ?? {};
@@ -263,7 +284,7 @@ const line = (text = '') => out.push(text);
 line('Ever Works — templates listing: manifest + template App specs');
 line(`repository : ${ROOT}`);
 line(`ajv options: { strict: false, allErrors: true, allowUnionTypes: true }`);
-line(`schemas    : schema/templates-manifest.schema.json, schema/app-spec.schema.json ($id ${appSpecSchema.$id})`);
+line(`schemas    : schema/templates-manifest.schema.json; schema/app-spec.schema.json for the spec block ($id ${appSpecSchema.$id})`);
 line(`specs from : ${RAW_BASE}/<template.repo>/<template.sha || template.ref>/${SPEC_PATH} (token: ${TOKEN ? 'yes' : 'no'})`);
 line();
 
