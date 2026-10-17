@@ -7,9 +7,9 @@ repository in [`manifest.json`](./manifest.json), the licence registry in [`lice
 the schemas both are checked against, and the CI that checks them. It holds **no application code and no
 copy of any template**.
 
-> **Status: seed.** The App Blueprint rows are marked `placeholder`: their template repositories exist, but
-> none has been released (tagged) or verified on a cluster yet. The four Website/Work Template rows are in
-> production.
+> **Status: seed.** The two App Blueprint rows are `beta` since 2026-10-17: each template repository is tagged
+> `v0.1.0` and its row pins that commit, so they are selectable, but neither has been verified on a cluster yet.
+> The four Website/Work Template rows are in production.
 
 ---
 
@@ -19,8 +19,8 @@ copy of any template**.
 
 | Template | Upstream project | License | Install shape | Status | Template repository |
 | --- | --- | --- | --- | --- | --- |
-| Cal (community build) | [`calcom/cal.diy`](https://github.com/calcom/cal.diy) | MIT | `metadata-only` | `placeholder` | [`ever-works/cal-template`](https://github.com/ever-works/cal-template) |
-| Umami | [`umami-software/umami`](https://github.com/umami-software/umami) | MIT | `metadata-only` | `placeholder` | [`ever-works/umami-template`](https://github.com/ever-works/umami-template) |
+| Cal (community build) | [`calcom/cal.diy`](https://github.com/calcom/cal.diy) | MIT | `metadata-only` | `beta` | [`ever-works/cal-template`](https://github.com/ever-works/cal-template) |
+| Umami | [`umami-software/umami`](https://github.com/umami-software/umami) | MIT | `metadata-only` | `beta` | [`ever-works/umami-template`](https://github.com/ever-works/umami-template) |
 
 **Cal** is open-source scheduling. Its Blueprint targets the upstream's **community edition** —
 `calcom/cal.diy`, which the upstream calls *Cal.diy* — carries the trademark notice the upstream requires,

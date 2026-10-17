@@ -4,7 +4,7 @@
 	"generatedBy": "manual",
 	"status": "seed",
 	"catalogOrganization": "ever-works",
-	"updatedAt": "2026-09-26",
+	"updatedAt": "2026-10-17",
 	"notes": [
 		"SEED / DRAFT — hand-authored on 2026-09-17 to create the repository; reduced to the listing only on 2026-09-26.",
 		"This file is the LISTING: one row per template repository we keep, website and app alike.",
@@ -112,7 +112,7 @@
 			"name": "Cal (community build)",
 			"summary": "Open-source scheduling: booking pages, calendar sync, reminders and a large Next.js app.",
 			"kind": "app",
-			"status": "placeholder",
+			"status": "beta",
 			"role": "website",
 			"workRepositorySuffix": "-app",
 			"shape": "metadata-only",
@@ -124,8 +124,8 @@
 			"template": {
 				"repo": "ever-works/cal-template",
 				"url": "https://github.com/ever-works/cal-template",
-				"ref": "main",
-				"sha": null,
+				"ref": "v0.1.0",
+				"sha": "55de074b7feeb82ede98d2c31eedd28201ebba01",
 				"isGitHubTemplate": false
 			},
 			"blueprint": {
@@ -154,8 +154,8 @@
 			"notes": [
 				"Template repository ever-works/cal-template (renamed from ever-works/cal-diy-template; blueprint id 'cal'). Its spec (.works/works.yml), shape (.works/template.yml) and documentation (README.md) live there and only there.",
 				"Upstream is calcom/cal.diy, the Open Scheduling community edition, whose own name is Cal.diy; the trademark notice refers to that name. Tags v6.2.0 and older are a different licence and code base, hence refs.exclude.",
-				"Status stays 'placeholder' (checked 2026-09-26): the repository exists, is public, has topic ever-works-app-blueprint and .works/works.yml, but has no tag or release, its spec's blueprint.sha is the all-zero placeholder, and nothing has run on a cluster.",
-				"So template.ref stays 'main' and template.sha null: the schema requires a 40-hex sha only for beta/production rows, and a release tag v0.1.0 does not exist yet. main head on 2026-09-26 was 55de074b7feeb82ede98d2c31eedd28201ebba01 (recorded, not pinned).",
+				"Released 2026-10-17 as status 'beta' (selectable): tag v0.1.0 (= blueprint.version) was created on main head 55de074b7feeb82ede98d2c31eedd28201ebba01, and the spec validates in blueprint mode with 0 errors. Still unverified: nothing has run on a cluster (blueprint.verified false), and the spec's blueprint.sha is still the all-zero placeholder.",
+				"template.ref is the tag v0.1.0 and template.sha its commit (55de074b7feeb82ede98d2c31eedd28201ebba01), as CONTRIBUTING.md's release step requires. Moving to 'production' needs a green verification run on a cluster.",
 				"Metadata-only, as the repository actually is (its .works/template.yml says so; it is not a fork): the template holds our metadata and no application source, so provisioning forks TWO repositories — calcom/cal.diy first (the Work Repository), then the template (provenance).",
 				"Re-creating the template as a public fork of calcom/cal.diy (code-bearing, one fork at provisioning) remains a future option; it would change this row and the template's .works/template.yml together.",
 				"The protected branding paths are part of the spec (display.protectedPaths in .works/works.yml) and are no longer copied into this row."
@@ -166,7 +166,7 @@
 			"name": "Umami",
 			"summary": "Privacy-first, cookieless web analytics: one container, one Postgres, heartbeat health check.",
 			"kind": "app",
-			"status": "placeholder",
+			"status": "beta",
 			"role": "website",
 			"workRepositorySuffix": "-app",
 			"shape": "metadata-only",
@@ -178,8 +178,8 @@
 			"template": {
 				"repo": "ever-works/umami-template",
 				"url": "https://github.com/ever-works/umami-template",
-				"ref": "main",
-				"sha": null,
+				"ref": "v0.1.0",
+				"sha": "7aeb58047d1796ecf7826ef5e09a513e160473ec",
 				"isGitHubTemplate": false
 			},
 			"blueprint": {
@@ -202,8 +202,8 @@
 				"Template repository ever-works/umami-template. Its spec (.works/works.yml), shape (.works/template.yml) and documentation (README.md) live there and only there.",
 				"Metadata-only: the template holds our metadata and no application source. The app source stays in umami-software/umami, so provisioning forks TWO repositories (the app source first, the template second); the App Work's Work Repository is the app-source fork.",
 				"The spec deploys the upstream's published image pinned by digest, so a run spends no build minutes; switching build.strategy to dockerfile builds the fork, which is why the app-source fork must exist (template README, 'Evolving an Umami App Work').",
-				"Status stays 'placeholder' (checked 2026-09-26): the repository exists, is public, has topic ever-works-app-blueprint and .works/works.yml, but has no tag or release, its spec's blueprint.sha is the all-zero placeholder, and nothing has run on a cluster.",
-				"So template.ref stays 'main' and template.sha null: the schema requires a 40-hex sha only for beta/production rows, and a release tag v0.1.0 does not exist yet. main head on 2026-09-26 was bb780ec1838fd76c6e2e483d3837d4941bd8fe02 (recorded, not pinned)."
+				"Released 2026-10-17 as status 'beta' (selectable): tag v0.1.0 (= blueprint.version) was created on main head 7aeb58047d1796ecf7826ef5e09a513e160473ec, and the spec validates in blueprint mode with 0 errors. Still unverified: nothing has run on a cluster (blueprint.verified false), and the spec's blueprint.sha is still the all-zero placeholder.",
+				"template.ref is the tag v0.1.0 and template.sha its commit (7aeb58047d1796ecf7826ef5e09a513e160473ec), as CONTRIBUTING.md's release step requires. Moving to 'production' needs a green verification run on a cluster."
 			]
 		}
 	]
