@@ -260,8 +260,8 @@
 			],
 			"notes": [
 				"E2E BRANCH ONLY (APW-13 T29, ACCEPTANCE.md §0.3): dev/stage pin EVER_WORKS_APPS_CATALOG_REF to a commit of this branch; production pins main and never lists this row.",
-				"The fixture Blueprint ever-works/app-fixture-hello-template stays PRIVATE (owner decision 2026-09-26) and keeps its spec at app-spec.yml (its .works/template.yml says specPath: app-spec.yml), not .works/works.yml.",
-				"So this row stays 'placeholder': CI reads .works/works.yml only (a 404 is a warning for a placeholder), and the platform's Blueprint resolver accepts only PUBLIC repositories, so the fixture cannot resolve until the manifest lookup (APW-03 T24/T26) can read a private Blueprint or the fixture moves its spec to .works/works.yml.",
+				"The fixture Blueprint ever-works/app-fixture-hello-template stays PRIVATE (owner decision 2026-09-26). Since 2026-10-17 its spec is at .works/works.yml (template.yml specPath; the root app-spec.yml is a superseded copy).",
+				"The row stays 'placeholder' because this repository's CI token cannot read a private repository. The platform resolver does not read this listing: since 2026-10-17 (ever-works/ever-works feat/aw-catalog-2) it resolves a PRIVATE ever-works Blueprint when the source repository is owned by ever-works or by an owner in EVER_WORKS_APPS_PRIVATE_BLUEPRINT_OWNERS, so ever-works/app-fixture-hello (probe) and any generated upstream (explicit blueprintId app-fixture-hello) resolve to it.",
 				"Generated upstreams: <e2e-upstream-org>/app-fixture-gen-* (that is, ever-works/app-fixture-gen-<runId>) must resolve to this Blueprint (spec FR-9, ACC-13-21). The schema cannot express a glob in upstreams[].repo, so the prefix is recorded here until it can.",
 				"Other ACCEPTANCE.md §0.3 test upstreams (app-fixture-injection, app-fixture-license-amber, app-fixture-license-red) do not exist in ever-works yet (checked 2026-10-17); add their rows when they do."
 			]
