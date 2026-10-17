@@ -16,6 +16,7 @@
 		"managed-hosting decision, verification) and makes a template listed, badgeable and searchable.",
 		"Status 'placeholder' = not released yet: the repository may exist, but no release tag v<blueprint.version> exists, so template.sha is null and nothing has been verified on a cluster.",
 		"`template.ref` is a branch for a website row (the existing fork-from-branch behaviour) and for an app row while it is a placeholder; on release an app row's `template.ref` becomes the tag `v<blueprint.version>` and `template.sha` that tag's commit (see CONTRIBUTING.md).",
+		"THIS IS THE e2e BRANCH: main plus test-only rows for the App Works acceptance lanes (APW-13 T29). dev/stage pin EVER_WORKS_APPS_CATALOG_REF to a commit here; production never reads this branch.",
 		"CI (tools/validate-specs.mjs) validates this file against schema/templates-manifest.schema.json and, for every app row, fetches .works/works.yml from the row's repository at template.sha or template.ref and validates it against schema/app-spec.schema.json."
 	],
 	"templates": [
@@ -204,6 +205,65 @@
 				"The spec deploys the upstream's published image pinned by digest, so a run spends no build minutes; switching build.strategy to dockerfile builds the fork, which is why the app-source fork must exist (template README, 'Evolving an Umami App Work').",
 				"Released 2026-10-17 as status 'beta' (selectable): tag v0.1.0 (= blueprint.version) was created on main head 7aeb58047d1796ecf7826ef5e09a513e160473ec, and the spec validates in blueprint mode with 0 errors. Still unverified: nothing has run on a cluster (blueprint.verified false), and the spec's blueprint.sha is still the all-zero placeholder.",
 				"template.ref is the tag v0.1.0 and template.sha its commit (7aeb58047d1796ecf7826ef5e09a513e160473ec), as CONTRIBUTING.md's release step requires. Moving to 'production' needs a green verification run on a cluster."
+			]
+		},
+		{
+			"slug": "app-fixture-hello",
+			"name": "App fixture (hello) — e2e only",
+			"summary": "Test-only fixture Blueprint for the App Works acceptance lanes (APW-13). Listed on the e2e branch only; production never reads it.",
+			"kind": "app",
+			"status": "placeholder",
+			"role": "website",
+			"workRepositorySuffix": "-app",
+			"shape": "metadata-only",
+			"appSource": {
+				"mode": "repository",
+				"repo": "ever-works/app-fixture-hello",
+				"defaultBranch": "main"
+			},
+			"template": {
+				"repo": "ever-works/app-fixture-hello-template",
+				"url": "https://github.com/ever-works/app-fixture-hello-template",
+				"ref": "main",
+				"sha": null,
+				"isGitHubTemplate": false
+			},
+			"blueprint": {
+				"id": "app-fixture-hello",
+				"version": "0.1.0",
+				"topic": "ever-works-app-blueprint",
+				"verified": false
+			},
+			"upstreams": [
+				{
+					"repo": "ever-works/app-fixture-hello",
+					"aliases": [],
+					"refs": {
+						"branches": [
+							"main"
+						]
+					}
+				}
+			],
+			"license": {
+				"spdx": "MIT",
+				"class": "green",
+				"source": "upstream"
+			},
+			"managedHosting": {
+				"allowed": false,
+				"reason": "Test fixture for the acceptance lanes; never hosted on Ever Works Apps."
+			},
+			"tags": [
+				"test",
+				"fixture"
+			],
+			"notes": [
+				"E2E BRANCH ONLY (APW-13 T29, ACCEPTANCE.md §0.3): dev/stage pin EVER_WORKS_APPS_CATALOG_REF to a commit of this branch; production pins main and never lists this row.",
+				"The fixture Blueprint ever-works/app-fixture-hello-template stays PRIVATE (owner decision 2026-09-26) and keeps its spec at app-spec.yml (its .works/template.yml says specPath: app-spec.yml), not .works/works.yml.",
+				"So this row stays 'placeholder': CI reads .works/works.yml only (a 404 is a warning for a placeholder), and the platform's Blueprint resolver accepts only PUBLIC repositories, so the fixture cannot resolve until the manifest lookup (APW-03 T24/T26) can read a private Blueprint or the fixture moves its spec to .works/works.yml.",
+				"Generated upstreams: <e2e-upstream-org>/app-fixture-gen-* (that is, ever-works/app-fixture-gen-<runId>) must resolve to this Blueprint (spec FR-9, ACC-13-21). The schema cannot express a glob in upstreams[].repo, so the prefix is recorded here until it can.",
+				"Other ACCEPTANCE.md §0.3 test upstreams (app-fixture-injection, app-fixture-license-amber, app-fixture-license-red) do not exist in ever-works yet (checked 2026-10-17); add their rows when they do."
 			]
 		}
 	]
